@@ -155,7 +155,10 @@ private struct CasperishHTMLFactory<Site: Website>: HTMLFactory where Site: Casp
                                     )
                                 )
                             )
-                        )
+                        ),
+                        .div(.id("disqus_thread")),
+                        .script(.src("/disqus.js")),
+                        .element(named: "noscript", text: "Please enable JavaScript to view the comments")
                 )
             )
         )
