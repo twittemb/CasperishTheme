@@ -99,11 +99,25 @@ extension CasperishWebsite {
 }
 
 private struct CasperishHTMLFactory<Site: Website>: HTMLFactory where Site: CasperishWebsite {
+    let googleAnalytics =
+        """
+                <!-- Global site tag (gtag.js) - Google Analytics -->
+                <script async src="https://www.googletagmanager.com/gtag/js?id=UA-109460106-1"></script>
+                <script>
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+
+                  gtag('config', 'UA-109460106-1');
+                </script>
+"""
+
     func makeIndexHTML(for index: Index,
                        context: PublishingContext<Site>) throws -> HTML {
         HTML(
             .lang(context.site.language),
             .head(for: index, on: context.site, stylesheetPaths: [context.site.rootPath.appendingComponent("/styles.css")]),
+            .head(.raw(self.googleAnalytics)),
             .indexBody(for: context.allItems(
                 sortedBy: \.date,
                 order: .descending
@@ -116,6 +130,7 @@ private struct CasperishHTMLFactory<Site: Website>: HTMLFactory where Site: Casp
         HTML(
             .lang(context.site.language),
             .head(for: section, on: context.site, stylesheetPaths: [context.site.rootPath.appendingComponent("/styles.css")]),
+            .head(.raw(self.googleAnalytics)),
             .indexBody(for: section.items, context: context, title: section.title, subtitle: section.description, location: section)
         )
     }
@@ -131,6 +146,7 @@ private struct CasperishHTMLFactory<Site: Website>: HTMLFactory where Site: Casp
         return HTML(
             .lang(context.site.language),
             .head(for: item, on: context.site, stylesheetPaths: [context.site.rootPath.appendingComponent("/styles.css")]),
+            .head(.raw(self.googleAnalytics)),
             .pageBody(for: context, location: item,
                       .group(
                         .div(.class("text-center pt-16 md:pt-32"),
@@ -166,6 +182,7 @@ private struct CasperishHTMLFactory<Site: Website>: HTMLFactory where Site: Casp
         HTML(
             .lang(context.site.language),
             .head(for: page, on: context.site, stylesheetPaths: [context.site.rootPath.appendingComponent("/styles.css")]),
+            .head(.raw(self.googleAnalytics)),
             .pageBody(for: context, location: page,
                       .group(.div(.class("container max-w-5xl mx-auto"),
                                   .div(.class("mx-0 sm:mx-6"),
@@ -183,6 +200,7 @@ private struct CasperishHTMLFactory<Site: Website>: HTMLFactory where Site: Casp
         HTML(
             .lang(context.site.language),
             .head(for: page, on: context.site, stylesheetPaths: [context.site.rootPath.appendingComponent("/styles.css")]),
+            .head(.raw(self.googleAnalytics)),
             .pageBody(for: context, location: page,
                       .group(.div(.class("container max-w-5xl mx-auto"),
                                   .div(.class("mx-0 sm:mx-6"),
